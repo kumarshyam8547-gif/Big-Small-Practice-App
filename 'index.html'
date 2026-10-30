@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Small & Color Bet</title>
+<style>
+body { text-align: center; font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 10px; }
+.wallet { font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #333; }
+.result-box { width: 150px; height: 150px; margin: 20px auto; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: white; transition: background-color 0.5s; }
+.red { background-color: #ff4d4d; }
+.green { background-color: #2ecc71; }
+.controls { margin-top: 20px; }
+button { padding: 15px 30px; font-size: 18px; margin: 10px; cursor: pointer; border: none; border-radius: 5px; color: white; }
+.btn-big { background-color: #e67e22; }
+.btn-small { background-color: #3498db; }
+.btn-red { background-color: #e74c3c; }
+.btn-green { background-color: #27ae60; }
+.message { font-size: 22px; font-weight: bold; margin-top: 20px; min-height: 30px; }
+.history { margin-top: 20px; font-size: 16px; color: #666; }
+</style>
+</head>
+<body>
+<div class="wallet"> Wallet: ₹<span id="balance">1000</span></div>
+<div id="resultBox" class="result-box red">?</div>
+<div class="message" id="message">Place your bet!</div>
+<div class="controls">
+<button class="btn-big" onclick="bet('BIG')">BIG</button>
+<button class="btn-small" onclick="bet('SMALL')">SMALL</button>
+</div>
+<div class="controls">
+<button class="btn-red" onclick="bet('RED')">RED</button>
+<button class="btn-green" onclick="bet('GREEN')">GREEN</button>
+</div>
+<div class="history" id="winLog"></div>
+<script>
+let balance = 1000;
+const betAmount = 100;
+function bet(type) {
+if (balance < betAmount) {
+document.getElementById('message').innerText = "Insufficient balance!";
+return;
+}
+// Random outcome
+const randomColor = Math.random() < 0.5 ? 'red' : 'green';
+const randomSize = Math.random() < 0.5 ? 'BIG' : 'SMALL';
+const resultBox = document.getElementById('resultBox');
+resultBox.className = 'result-box ' + randomColor;
+resultBox.innerText = randomColor.toUpperCase() + " / " + randomSize;
+let won = false;
+if (type === randomColor.toUpperCase() || type === randomSize) {
+won = true;
+}
+const messageEl = document.getElementById('message');
+const balanceEl = document.getElementById('balance');
+const winLogEl = document.getElementById('winLog');
+if (won) {
+balance += betAmount;
+messageEl.style.color = "#27ae60";
+messageEl.innerText = "You Win ₹" + betAmount + "!";
+winLogEl.innerText = "Last result: " + randomColor.toUpperCase() + " & " + randomSize;
+} else {
+balance -= betAmount;
+messageEl.style.color = "#e74c3c";
+messageEl.innerText = "Try Again!";
+winLogEl.innerText = "Last result: " + randomColor.toUpperCase() + " & " + randomSize;
+}
+balanceEl.innerText = balance;
+if (balance <= 0) {
+messageEl.innerText = "Game Over! Refresh to restart.";
+}
+}
+</script>
+</body>
+</html>
